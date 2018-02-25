@@ -12,9 +12,7 @@ class TestWorkflow(object):
             super().__init__("Add One Task")
 
         def is_requirement_satisfied(self, data):
-            if isinstance(data, int):
-                return True
-            return False
+            return isinstance(data, int)
 
         def run(self, data):
             return data + 1
@@ -64,4 +62,5 @@ class TestWorkflow(object):
         task_list = [self.SimpleTask, "data", self.SimpleTask]
         with pytest.raises(TypeError):
             workflow.Workflow(task_list)
+
 

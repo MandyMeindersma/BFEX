@@ -78,6 +78,6 @@ if __name__ == "__main__":
     connections.create_connection()
 
     tasks = [GetFacultyFromElasticSearch, FacultyPageScrape, UpdateFacultyFromScrape]
-    workflow_manager = Workflow(tasks, "thing")
+    workflow_manager = Workflow(tasks)
 
     result = workflow_manager.run()
