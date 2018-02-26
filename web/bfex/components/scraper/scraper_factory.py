@@ -9,10 +9,8 @@ class ScraperFactory(object):
     @staticmethod
     def create_scraper(url, type):
         if type == ScraperType.ORCID:
-            scraper = OrcIdScraper(url, type)
+            return OrcIdScraper(url, type)
         if type == ScraperType.RESEARCHID:
-            scraper = ResearchIdScraper(url, type)
+            return ResearchIdScraper(url, type)
         if type == ScraperType.PROFILE:
-            scraper = ProfileScraper(url, type)
-
-        return scraper
+            return ProfileScraper(url, type)
