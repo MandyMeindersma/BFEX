@@ -55,7 +55,3 @@ class FacultyPageScrape(Task):
 
 if __name__ == "__main__":
     task = FacultyPageScrape()
-
-
-
-

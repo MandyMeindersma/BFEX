@@ -12,11 +12,20 @@ class GetFacultyFromElasticSearch(Task):
         self.task_name = "Get all Faculty Members"
 
     def is_requirement_satisfied(self, data):
-        satisfied = True
-        
-        return satisfied
+        """ Checks the requirements for a faculty page scraping are satisfied.
+
+        :param list data: list of all faculty
+        :return: True if data is null. Data should be null as we pass 
+        nothing into it to run the code
+        """
+
+        return data == None
 
     def run(self, data):
+        """ Searches through all results in elastic search
+        :param data: str or Faculty instance.
+        :return: all faculty
+        """
         s = Faculty.search()
         allFaculty = [faculty for faculty in s.scan()]
         return allFaculty

@@ -79,5 +79,4 @@ if __name__ == "__main__":
 
     tasks = [GetFacultyFromElasticSearch, FacultyPageScrape, UpdateFacultyFromScrape]
     workflow_manager = Workflow(tasks)
-
-    result = workflow_manager.run()
+    workflow_manager.run()
