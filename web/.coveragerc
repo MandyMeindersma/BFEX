@@ -1,2 +1,2 @@
 [run]
-omit = bfex/components/key_generation/RAKE/rake.py
+omit = bfex/components/key_generation/RAKE/rake.py, test/*
