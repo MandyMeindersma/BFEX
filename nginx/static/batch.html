@@ -1,0 +1,151 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js">    </script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<div class="main text-center">
+  <div class="home text-center">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <h1 class="headline">Batch Search Engine</h1>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                  <form action="" class="BFEX-search-form">
+                      <input type="search" placeholder="Search BFEX..." class="BFEX-search-input" id="BFEX-search-input">
+                      <button class="button btn btn-success btn-BFEX">BFEX Search</button>
+                  </form>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                  <footer class="attribution">
+                      <p>Designed and coded by TEAM BFEX</p>
+                  </footer>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<!-- Results Page -->
+
+  <div class="result hidden">
+      <header class="header">
+          <div class="container">
+              <div class="row">
+                  <div class="col-md-12">
+                      <form action="" class="result-BFEX-search-form">
+                          <input type="text" placeholder="Search BFEX..." class="result-BFEX-search-form-input" id="result-BFEX-search-form-input">
+                          <button class="btn btn-success result-btn-BFEX">BFEX Search</button>
+                      </form>
+                  </div>
+                  <div class="col-md-12">
+                      <h1>BFEX Search</h1>
+                  </div>		
+              </div>
+          </div>
+      </header>	
+      
+      <div class="container">
+          <section class="search-results">
+              <div class="one-half column">
+                  <div class="display-results"></div>
+                  <table id="table">
+                    <thead>
+                    <tr>
+                        <th data-field="name">Name</th>
+                        <th data-field="keywords">approach</th>
+                    </tr>
+                    </thead>
+                </table>
+              </div>
+          </section>
+      
+      </div> <!-- Container -->	
+  </div> <!-- Results -->
+</div>
+<link rel="stylesheet" href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" />
+<script src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
+
+<script type="text/javascript">
+
+window.onload = function() {
+    document.getElementById("BFEX-search-input").focus();
+};
+$('#table').bootstrapTable();
+  function ajax(keyword){
+  var approaches = {0:'generic',1:'rake',2:'textrank',3:'tf-idf'}
+  return $.when(
+      $.ajax({url: "http://localhost:8901/search?query="+keyword,dataType:"json"}),
+      $.ajax({url: "http://localhost:8901/faculty",dataType:"json"}),
+      $.ajax({url: "http://localhost:8901/batch",dataType:"json"})
+    )
+    .done(function(search,faculty,batch){
+      var data = {};
+      search[0].data.forEach(e => {
+        e.approach = {0:[],1:[],2:[],3:[]};
+        data[e.faculty_id] = e;
+      });
+      // faculty[0].data.forEach(e => {});
+      batch[0].data.forEach(e => {
+        var f = data[e.faculty_id];
+        if (f && e.keywords){
+          f.approach[e.approach_id] = f.approach[e.approach_id].concat(e.keywords);
+          // f.approach += approaches[e.approach_id] + e.keywords + '<br>'
+        };
+      });
+      Object.keys(data).map(e=>{
+        temp = Object.keys(data[e].approach).map(x=>{
+          string = `${approaches[x]} <br> ${data[e].approach[x].join(' ')}`;
+          string = string.replace(/'/g, '');
+          string = string.replace(/\[/g, '');
+          string = string.replace(/\]/g, '');
+          return string
+        })
+        data[e].keywords = temp.join('<br>')
+      })
+      var results = Object.keys(data).map(e=>data[e]);
+        $('#table').bootstrapTable('load',results);
+      return results
+    })
+    .fail(function(err){
+        console.log(err);
+    });}
+  $(".result-btn-BFEX").click(function (event) {
+    event.preventDefault();
+    var keyword = $(".result-BFEX-search-form-input").val();
+    document.getElementById("result-BFEX-search-form-input").blur();
+    ajax(keyword);
+  });
+
+  $(".btn-BFEX").click(function(event) {
+    event.preventDefault();
+    var keyword = $(".BFEX-search-input").val();
+
+    if (keyword !== "") {
+      $(".result-BFEX-search-form-input").val(keyword);
+      $(".home").addClass('hidden');
+        $(".result").removeClass('hidden');
+        document.getElementById("BFEX-search-input").blur();
+        $(".BFEX-search-input").val("");
+      document.getElementById("result-BFEX-search-form-input").blur();	
+      $(".display-results").html("");
+          ajax(keyword);
+    }
+
+    else {
+      alert("Enter a keyword into the search box");
+    }
+}); 
+</script>

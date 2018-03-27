@@ -15,9 +15,9 @@ class BatchAPI(Resource):
 
     def get(self):
         """HTTP Get that enables boolean query processing and batch."""
-        response = Keywords.search().query().execute()
+        response = Keywords.search()
         schema = KeywordSchema()
-        results = [schema.dump(s) for s in response]
+        results = [schema.dump(s) for s in response.scan()]
 
         return {
             "data": results
