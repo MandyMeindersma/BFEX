@@ -42,3 +42,11 @@ class TestURLs(object):
         assert (url == "https://www.ualberta.ca/science/about-us/contact-us/faculty-directory/j-nelson-amaral")
 
 
+class TestGenerateNames(object):
+    def test_generate_name(self):
+        valid_name = "Nelson.Amaral"
+        my_dict = {}
+        my_dict["name"] = valid_name
+
+        url = generate_names_from_json(my_dict)
+        assert url == "nelson-amaral"

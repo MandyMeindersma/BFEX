@@ -19,8 +19,10 @@ class TestGoogleScholar():
     def test_create__success(self):
         link = 'https://scholar.google.ca/citations?user=KffJRdgAAAAJ&hl=en&oi=sra'
         ga = GoogleScholarPageScrape()
-        obj = Faculty(name="Test.Prof", faculty_id=110, email="test@test.com")
+        obj = Faculty(name="Test.Profman", faculty_id=115, email="test@test.com")
         obj.google_scholar = link
+        res = ga.is_requirement_satisfied(obj)
+        assert res is True
         res = ga.run(obj)
         print(res)
         assert res != None

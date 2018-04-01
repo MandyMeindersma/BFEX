@@ -48,6 +48,9 @@ class TestWorkflow(object):
         assert workflow_manager.last_result == 2
         assert not is_not_finished
 
+        res = workflow_manager.get_last_result()
+        assert res == workflow_manager.last_result
+
     def test_workflow_exceptions(self):
         # Test a ValueError is raised when creating a workflow with no tasks in the tasklist
         task_list = []

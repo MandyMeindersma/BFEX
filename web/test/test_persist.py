@@ -27,7 +27,7 @@ class TestPersistTasks(object):
 
         name = "William.Allison"
         scrapp = Scrapp()
-        scrapp.set_text = "some text"
+        scrapp.set_text("some text")
 
         data = (name,scrapp)
 
@@ -40,8 +40,10 @@ class TestPersistTasks(object):
         faculty = Faculty(name="William.Allison", full_name="Allison, William.", faculty_id=379, email="william.allison@ualberta.ca")
         faculty.save()
         scrapp = Scrapp()
-        scrapp.add_meta = ["orcid_link","http://orcid.org/0000-0002-8461-4864"]
-        scrapp.add_meta = ["researchid_link","http://www.researcherid.com/rid/A-2612-2014"]
+        scrapp.add_meta("orcid_link","http://orcid.org/0000-0002-8461-4864")
+        scrapp.add_meta("researchid_link","http://www.researcherid.com/rid/A-2612-2014")
+        scrapp.add_meta("googlescholar_link", "www.this.is.a.real.link.com")
+        scrapp.add_meta("text", "This is super real text from a real source.")
         sleep(3)
         data = (faculty.name,scrapp)
         task = UpdateFacultyFromScrape()
@@ -49,3 +51,20 @@ class TestPersistTasks(object):
 
         assert res != None
         
+    @pytest.mark.skipif(is_dev_env(), reason="Not running in build environment.")    
+    def test_update_after_scrape(self):
+        keywords = []
+        key = Keywords(faculty_id=379, datasource="GoogleScholar", approach_id=1, keywords="Bob")
+        key.save()
+        keywords.append(key)
+        key = Keywords(faculty_id=379, datasource="GoogleScholar", approach_id=3, keywords="Jim")
+        keywords.append(key)
+        sleep(3)
+        data = keywords
+        task = UpdateKeywordsFromGenerator()
+        res = task.is_requirement_satisfied(data)
+        assert res is True
+        res = task.run(data)
+
+        assert res != None
+
