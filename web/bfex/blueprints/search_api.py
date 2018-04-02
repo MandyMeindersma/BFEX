@@ -16,8 +16,16 @@ class SearchAPI(Resource):
     def get(self):
         """HTTP Get that enables boolean query processing and search."""
         query = request.args.get('query')
+        dept = request.args.get('department')
 
         if query is None:
+            abort(400)
+
+        # Take dept string and turn it into an easy to compare set.
+        try:
+            if dept is not None:
+                dept_filter = set([x.strip() for x in dept.split(',')])
+        except:
             abort(400)
 
         q_parser = parser.QueryParser()
@@ -43,7 +51,9 @@ class SearchAPI(Resource):
         for faculty_id, keywords in faculty_with_keywords.items():
             faculty = Faculty.safe_get(faculty_id)
 
-            if faculty is None: continue
+            if faculty is None or \
+                (dept is not None and faculty.department not in dept_filter): 
+                continue
             
             faculty.generated_keywords = keywords
             results.append(schema.dump(faculty))
