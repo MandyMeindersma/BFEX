@@ -80,8 +80,9 @@ window.onload = function() {
 };
 
 function ajax (keyword) { //AJAX request
+    var url = "http://localhost:8901";
 	return $.ajax({ 
-		url: "http://localhost:8901/search?query=" + keyword,
+		url: url + "/search?query=" + keyword,
 		dataType: "json",
 		success: function(response) {
 			console.log(response);
