@@ -86,11 +86,10 @@ window.onload = function() {
 $('#table').bootstrapTable();
   function ajax(keyword){
   var approaches = {0:'generic',1:'rake',2:'textrank',3:'tf-idf'}
-  var url = "http://localhost:8901";
   return $.when(
-      $.ajax({url: url + "/search?query="+keyword,dataType:"json"}),
-      $.ajax({url: url + "/faculty",dataType:"json"}),
-      $.ajax({url: url + "/batch",dataType:"json"})
+      $.ajax({url: "/search?query="+keyword,dataType:"json"}),
+      $.ajax({url: "/faculty",dataType:"json"}),
+      $.ajax({url: "/batch",dataType:"json"})
     )
     .done(function(search,faculty,batch){
       var data = {};
