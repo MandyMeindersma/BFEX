@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request, send_from_directory
 from bfex.blueprints import *
 from bfex.blueprints.faculty_api import faculty_bp
 from bfex.blueprints.search_api import search_bp
@@ -27,9 +27,13 @@ def create_app():
     """
     from elasticsearch_dsl.connections import connections
     
-    app = Flask("bfex")
+    app = Flask("bfex", static_url_path='')
     cors = CORS(app)
     app.config['CORS_HEADERS'] = 'Content-Type'
+
+    @app.route('/static/<path:path>')
+    def send_static(path):
+        return send_from_directory('static', path)
 
     # Elasticsearch connection setup
     elastic_host = os.getenv("ELASTIC_HOST", "localhost")

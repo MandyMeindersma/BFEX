@@ -86,6 +86,7 @@ window.onload = function() {
 $('#table').bootstrapTable();
   function ajax(keyword){
   var approaches = {0:'generic',1:'rake',2:'textrank',3:'tf-idf'}
+  var port = ":8901";
   return $.when(
       $.ajax({url: "/search?query="+keyword,dataType:"json"}),
       $.ajax({url: "/faculty",dataType:"json"}),
@@ -107,7 +108,7 @@ $('#table').bootstrapTable();
       });
       Object.keys(data).map(e=>{
         temp = Object.keys(data[e].approach).map(x=>{
-          string = `${approaches[x]} <br> ${data[e].approach[x].join(' ')}`;
+          string = `${approaches[x]} <br> ${data[e].approach[x].join(', ')}`;
           string = string.replace(/'/g, '');
           string = string.replace(/\[/g, '');
           string = string.replace(/\]/g, '');
