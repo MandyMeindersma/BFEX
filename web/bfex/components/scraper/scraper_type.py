@@ -9,3 +9,4 @@ class ScraperType(Enum):
     RESEARCHID = 2
     PROFILE = 3
     GOOGLESCHOLAR = 4
+    RESEARCHIDABSTRACT = 5

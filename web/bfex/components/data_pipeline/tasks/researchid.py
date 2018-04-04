@@ -75,9 +75,16 @@ class ResearchIdPageScrape(Task):
 
             for scrapp in titles:
                 doc = Document()
-                doc.source = "ResearchId"
+                if scrapp.data_source == ScraperType.RESEARCHID:
+                    doc.source = "ResearchId"
+                else:
+                    doc.source = "ResearchIdAbstract"
                 doc.faculty_id = faculty.faculty_id
-                doc.text = scrapp.title
+                if scrapp.data_source == ScraperType.RESEARCHID:
+                    doc.text = scrapp.title
+                else:
+                    doc.text = scrapp.meta_data["text"]
+                
                 doc.date = datetime.now()
                 doc.save()
 

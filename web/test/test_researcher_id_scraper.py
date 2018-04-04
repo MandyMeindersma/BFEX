@@ -20,6 +20,7 @@ class TestResearcherIdScraper():
 
         scrapps = my_scraper.get_scrapps()
         assert scrapps is not None
+        print(scrapps[0].meta_data["keywords"])
 
         assert scrapps[0].meta_data["keywords"] is not None
         assert scrapps[0].meta_data["description"] is not None
