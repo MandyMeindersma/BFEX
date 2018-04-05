@@ -1,5 +1,8 @@
-from flask import Blueprint, abort, render_template, make_response, request
+from flask import Blueprint, abort, render_template, make_response, request, send_file
 from flask_restful import Resource, Api
+
+from io import BytesIO
+import json
 
 from bfex.components.search_engine import parser, builder
 from bfex.models import Faculty, Keywords
@@ -60,9 +63,12 @@ class BatchSearchAPI(Resource):
         for faculty_id in empty_profs:
             del faculty_with_keywords[faculty_id]
 
-        return {
-            "data": SearchAPI.create_results(faculty_with_keywords, dept_filter=[])
-        }
+        results = SearchAPI.create_results(faculty_with_keywords, dept_filter=[])
+        str_io = BytesIO()
+        str_io.write(json.dumps(results, indent=4).encode())
+        str_io.seek(0)
+
+        return send_file(str_io, as_attachment=True, attachment_filename="batch_results.txt")
 
 api.add_resource(BatchAPI, '/batch')
 api.add_resource(BatchSearchAPI, '/batch/search')
