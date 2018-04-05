@@ -26,7 +26,7 @@ class Faculty(DocType, Model):
     """
     faculty_id = Integer(required=True)
     name = Text(required=True)
-    full_name = Text(required=True)
+    full_name = Text()
     email = Text(required=True)
     department = Text()
 

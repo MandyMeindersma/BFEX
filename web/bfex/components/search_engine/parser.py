@@ -35,7 +35,6 @@ class QueryParser(object):
 
         :exception: QueryException if the query is not a valid boolean query."""
 
-        print(query)
         if query.count('(') != query.count(')'):
             raise QueryException('Parentheses dont match')
 

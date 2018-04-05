@@ -21,3 +21,19 @@ class TestScrapeTasks(object):
 
         assert requirement is False
 
+    def test_scrape_task(self):
+        name = "J.Nelson.Amaral"
+        task = FacultyPageScrape()
+        res = task.is_requirement_satisfied(name)
+        assert res is True
+        res = task.run(name)
+        assert res is not None
+
+    def test_scrape_task(self):
+        fac = Faculty(name="J.Nelson.Amaral", faculty_id=123, email="real@email.com")
+        task = FacultyPageScrape()
+        res = task.is_requirement_satisfied(fac)
+        assert res is True
+        res = task.run(fac)
+        assert res is not None
+
