@@ -1,3 +1,4 @@
+from bfex.components.data_pipeline.tasks import Task
 from nltk.corpus import wordnet as wn
 from bfex.models import *
 import io
@@ -5,7 +6,13 @@ import string
 import nltk 
 import os
 
-class FilterKeywords():
+try:
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('wordnet')
+
+
+class FilterKeywords(Task):
 
     """
     Filter out some words from keywords
