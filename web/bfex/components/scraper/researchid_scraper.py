@@ -43,7 +43,7 @@ class ResearchIdScraper(Scraper):
         # May append a blank scrape, but first in the list is for freebies
         scrapp.set_source(self.type)
         scrapps.append(scrapp)    
-            
+
         imgs = soup.find_all("img")
         links = []
         for img in imgs:
@@ -61,12 +61,11 @@ class ResearchIdScraper(Scraper):
                         words = text.split()
                         # we have to remove the small text,
                         # then the html, css and javascript
-                        if (len(words) > 100) and (">" not in text) and ("background-" not in text) and ("||" not in text):
+                        if (len(words) > 100) and (">" not in text) and ("background-" not in text) and ("||" not in text) and ("}" not in text):
                             scrapp_absract = Scrapp()
                             scrapp_absract.add_meta("text", text)
                             scrapp_absract.set_source(ScraperType.RESEARCHIDABSTRACT)
                             scrapps.append(scrapp_absract)
-                            print("\n\n", scrapp_absract.meta_data["text"], "\n\n")
                 except requests.exceptions.ConnectionError:
                     print("\nThere was a connection error\n")
 
