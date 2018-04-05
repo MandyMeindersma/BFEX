@@ -59,21 +59,9 @@ def filter_keywords(keywords):
         keywords = [''.join(c for c in s if c not in string.punctuation) for s in keywords]
         keywords = [s for s in keywords if s]
         
-        # remove any name in the keywords
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)),'name.txt')
-
-        name_file = io.open(path, 'r')
-        name = name_file.read()
-        name = [item.lower() for item in name]
-
-        filtered_keywords = []
-        for word in keywords:
-            if word not in name:
-                filtered_keywords.append(word)
-        
         #use nltk pos tag to tag each keyword with tag, use only noun tag
 
-        tag = nltk.pos_tag(filtered_keywords)
+        tag = nltk.pos_tag(keywords)
 
         tag_keywords = []
 
