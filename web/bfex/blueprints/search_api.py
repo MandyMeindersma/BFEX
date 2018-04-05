@@ -50,8 +50,14 @@ class SearchAPI(Resource):
     
     @staticmethod
     def get_faculty_with_keywords(response):
-        # Build keyword set for each faculty
-        keyword_schema = KeywordSchema(exclude=['faculty_id'])
+        """ Builds a dictionary of faculty ids to list of all keywords.
+
+        Finds all keywords that belong to a professor, and creates a list. The
+        list contains the json representation of the Keywords model, not
+        including the faculty id.
+        :param response: List of faculty model objects.
+        :returns: Dictionary of integer id's to a list of strings.
+        """
         faculty_with_keywords = {}
         for keywords in response:
             if keywords.faculty_id not in faculty_with_keywords:
@@ -63,6 +69,15 @@ class SearchAPI(Resource):
 
     @staticmethod
     def create_results(faculty_with_keywords, dept_filter):
+        """ Creates the json representation of a faculty member, including all keywords.
+
+        :param faculty_with_keywords: A dictionary of id's to lists of keywords.
+            The keywords are inserted into the faculty object before being dumped to json.
+        :param dept_filter: List of string departments to be included in the results. If a
+            professor does not belong one of the departments, they are not included.
+            All professors are included if the filter is empty.
+        :returns: List of JSON objects, each representing a faculty member and keywords.
+        """
         # Build json representations with nested keywords
         schema = FacultySchema()
         results = []
@@ -70,7 +85,7 @@ class SearchAPI(Resource):
             faculty = Faculty.safe_get(faculty_id)
 
             if faculty is None or \
-                (len(dept_filter) > 0 and faculty.department not in dept_filter): 
+                    (len(dept_filter) > 0 and faculty.department not in dept_filter):
                 continue
             
             faculty.generated_keywords = keywords
@@ -80,13 +95,28 @@ class SearchAPI(Resource):
 
     @staticmethod
     def add_name_search_results(faculty_with_keywords, pf_query):
+        """ Inserts results of pf_query on faculty index into faculty_with_keywords.
+
+        If an faculty is returned from the query, but does not currently exist in
+        faculty_with_words, the faculty member plus their entire keyword set,
+        is inserted into the dictionary.
+        :param faculty_with_keywords: Dictionary of faculty id's to keywords.
+        :param pf_query: Postfix query created by the Query Builder.
+        :returns: faculty_with_keywords also containing faculty whose names match the
+            query.
+        """
+        print("QUERY", pf_query)
         # Add functionality of searching names in query.
         q_builder = builder.QueryBuilder()
         name_elastic_query = q_builder.build(pf_query, search_field="full_name")
+        print(name_elastic_query)
         names_response = Faculty.search().query(name_elastic_query).execute()
-        
+
+        print(names_response)
+
         for faculty in names_response:
             # We already have the faculty who was searched in the results.
+            print(faculty)
             if faculty.faculty_id in faculty_with_keywords:
                 continue
 
