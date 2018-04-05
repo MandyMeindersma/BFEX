@@ -68,6 +68,8 @@ class ResearchIdScraper(Scraper):
                             scrapps.append(scrapp_absract)
                 except requests.exceptions.ConnectionError:
                     print("\nThere was a connection error\n")
+                except requests.exceptions.MissingSchema:
+                    print("\nThere was a Missing Schema error\n")
 
         titles = soup.find_all("input")
 
