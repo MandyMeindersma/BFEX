@@ -33,6 +33,22 @@ class DataIngester(object):
         run_workflow.apply_async((workflow,), countdown=5)
 
     @staticmethod
+    def bulk_create_lexicon(json_data, write=True):
+        """Takes in a list of JSON objects, and loads them into elasticsearch.
+
+        :exception TypeError: If the json_data is not a sequence object. The expected type is a List.
+        """
+        if not isinstance(json_data, Sequence):
+            raise TypeError("Expected a Sequence, but got a {}", type(json_data))
+
+        if write:
+            lex = Lexicon()
+            lex.keywords = json_data
+            lex.save()
+            
+        print("Ingested lexicon words")
+
+    @staticmethod
     def bulk_create_faculty(json_data, write=True):
         """Takes in a list of JSON objects, and loads them into elasticsearch.
 

@@ -37,6 +37,7 @@ def create_app():
     app.register_blueprint(grants_bp)
     app.register_blueprint(document_bp)
     app.register_blueprint(keyword_bp)
+    app.register_blueprint(lexicon_bp)
 
     return app
 
