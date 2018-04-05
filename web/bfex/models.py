@@ -138,7 +138,7 @@ def initialize_models():
     """Initializes the mappings of all models in ElasticSearch. Expects that a connection to elastic has already been
     initialized.
     """
-    models = [Faculty, Keywords, Grant, Publication, Document]
+    models = [Faculty, Keywords, Grant, Publication, Document, Lexicon]
     for model in models:
         try:
             model.init()
