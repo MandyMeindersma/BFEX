@@ -2,7 +2,7 @@ from bfex.components.key_generation.key_generation_approach import KeyGeneration
 from bfex.components.key_generation.RAKE import rake
 from bfex.components.scraper.scrapp import Scrapp
 import io
-from bfex.components.key_generation.filter.keywords_filter import filter_keywords
+
 
 class RakeApproach(KeyGenerationApproach):
     def __init__(self):
@@ -23,8 +23,6 @@ class RakeApproach(KeyGenerationApproach):
             # fitler keywords produced with score 4 or more.
             if keywords_with_score[n][1] >= 4:
                 keywords.append(keywords_with_score[n][0])
-
-        keywords = filter_keywords(keywords)
 
         return keywords
         
