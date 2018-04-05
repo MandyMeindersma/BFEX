@@ -105,18 +105,13 @@ class SearchAPI(Resource):
         :returns: faculty_with_keywords also containing faculty whose names match the
             query.
         """
-        print("QUERY", pf_query)
         # Add functionality of searching names in query.
         q_builder = builder.QueryBuilder()
         name_elastic_query = q_builder.build(pf_query, search_field="full_name")
-        print(name_elastic_query)
         names_response = Faculty.search().query(name_elastic_query).execute()
-
-        print(names_response)
 
         for faculty in names_response:
             # We already have the faculty who was searched in the results.
-            print(faculty)
             if faculty.faculty_id in faculty_with_keywords:
                 continue
 
@@ -124,5 +119,6 @@ class SearchAPI(Resource):
                 .query('match', faculty_id=faculty.faculty_id).execute()
             
             faculty_with_keywords[faculty.faculty_id] = faculty_keywords
+
 
 api.add_resource(SearchAPI, '/search')
