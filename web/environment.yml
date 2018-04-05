@@ -26,3 +26,4 @@ dependencies:
   - redis==2.10.6
   - celery==4.1.0
   - scipy==1.0.0
+  - flask-cors==3.0.3
