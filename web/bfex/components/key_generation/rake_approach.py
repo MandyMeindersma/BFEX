@@ -25,7 +25,7 @@ class RakeApproach(KeyGenerationApproach):
                 keywords.append(keywords_with_score[n][0])
 
         return keywords
-           
+        
     def get_id(self):
         return self.approach_id
 
