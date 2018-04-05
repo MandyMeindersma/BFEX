@@ -1,7 +1,7 @@
 from datetime import datetime
 from bfex.components.scraper.scraper_factory import ScraperFactory
 from bfex.components.scraper.scraper_type import ScraperType
-from bfex.models import Faculty, Document
+from bfex.models import Faculty, Document, Keywords
 from bfex.common.utils import URLs, FacultyNames
 from bfex.common.exceptions import WorkflowException, ScraperException
 from bfex.components.data_pipeline.tasks.task import Task
@@ -61,6 +61,12 @@ class ResearchIdPageScrape(Task):
             doc = Document()
             doc.faculty_id = faculty.faculty_id
             doc.source = "ResearchId"
+
+            keywords = Keywords()
+            keywords.faculty_id = faculty.faculty_id
+            keywords.datasource = "user_keywords"
+            keywords.approach_id  = "4"
+
             try:
                 doc.text = keywords_and_description.meta_data["description"]
             except:
@@ -68,16 +74,25 @@ class ResearchIdPageScrape(Task):
                 doc.text = ""
             try:
                 doc.user_keywords = keywords_and_description.meta_data["keywords"]
+                keywords.keywords = keywords_and_description.meta_data["keywords"]
             except:
                 print("No keywords")
             doc.date = datetime.now()
             doc.save()
-
+            keywords.save()
+            
             for scrapp in titles:
                 doc = Document()
-                doc.source = "ResearchId"
+                if scrapp.data_source == ScraperType.RESEARCHID:
+                    doc.source = "ResearchId"
+                else:
+                    doc.source = "ResearchIdAbstract"
                 doc.faculty_id = faculty.faculty_id
-                doc.text = scrapp.title
+                if scrapp.data_source == ScraperType.RESEARCHID:
+                    doc.text = scrapp.title
+                else:
+                    doc.text = scrapp.meta_data["text"]
+                
                 doc.date = datetime.now()
                 doc.save()
 

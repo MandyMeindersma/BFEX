@@ -1,4 +1,5 @@
 from bfex.components.scraper.scraper import *
+from bfex.components.scraper.scraper_type import *
 
 
 class ResearchIdScraper(Scraper):
@@ -38,10 +39,38 @@ class ResearchIdScraper(Scraper):
                     scrapp.add_meta("description", keywords)
                     found_d = True
                 i += 1
-
+        
         # May append a blank scrape, but first in the list is for freebies
         scrapp.set_source(self.type)
-        scrapps.append(scrapp)
+        scrapps.append(scrapp)    
+
+        imgs = soup.find_all("img")
+        links = []
+        for img in imgs:
+            if "window.open" in img.attrs.get('onclick', ''):
+                link = img.attrs.get('onclick', '')
+                link = link.split("(")
+                link = link[1]
+                link = link[1:-2]
+                try:
+                    response = requests.get(link)
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    # texts will include javascript and html and css. I am not sure why this happens
+                    texts = soup.find_all(text=True)
+                    for text in texts:
+                        words = text.split()
+                        # we have to remove the small text,
+                        # then the html, css and javascript
+                        if (len(words) > 100) and (">" not in text) and ("background-" not in text) and ("||" not in text) and ("}" not in text):
+                            scrapp_absract = Scrapp()
+                            scrapp_absract.add_meta("text", text)
+                            scrapp_absract.set_source(ScraperType.RESEARCHIDABSTRACT)
+                            scrapps.append(scrapp_absract)
+                except requests.exceptions.ConnectionError:
+                    print("\nThere was a connection error\n")
+                except requests.exceptions.MissingSchema:
+                    print("\nThere was a Missing Schema error\n")
+
         titles = soup.find_all("input")
 
         # Get the titles
