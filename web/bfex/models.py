@@ -120,6 +120,20 @@ class Document(DocType, Model):
         return "<Faculty ID:{} Source: {} Text: {}".format(self.faculty_id, self.source, self.text)
 
 
+class Lexicon(DocType, Model):
+    """Definition of the basic Lexicon doctype.
+
+    Contains all keywords to be pulled from text.
+    Data is saved in the elaticsearch index lexicon.
+    """
+    keywords = Text(required=True)
+
+    class Meta:
+        index = "lexicon"
+
+    def __str__(self):
+        return "<Keywords:{}".format(self.keywords)
+
 def initialize_models():
     """Initializes the mappings of all models in ElasticSearch. Expects that a connection to elastic has already been
     initialized.

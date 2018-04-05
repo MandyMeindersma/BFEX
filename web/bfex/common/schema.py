@@ -62,3 +62,6 @@ class DocumentSchema(Schema):
     text = fields.String()
     date = fields.Date()
     keywords = fields.String()
+
+class LexiconSchema(Schema):
+    keywords = fields.List(fields.String)
