@@ -19,8 +19,11 @@ class LexiconApproach(KeyGenerationApproach):
         :return: keywords from the lexicon
         """
         keywords = []
-        search = Lexicon.search().execute()
-        lexicon = search[0].keywords
+        try:
+            search = Lexicon.search().execute()
+            lexicon = search[0].keywords
+        except:
+            return keywords
 
         text = re.sub("[^\w']+", ' ', text.lower())
         tokens = nltk.word_tokenize(text)
