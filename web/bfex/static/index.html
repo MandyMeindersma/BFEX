@@ -113,7 +113,7 @@ function showResults (callback) {
         if (f.google_scholar) snippet.push(f.google_scholar);
         if (f.research_id) snippet.push(f.research_id);
         if (f.sciverse_id) snippet.push(f.sciverse_id);
-		$(".snippet-" + m).html(snippet.length!=0?snippet.join('<br>'):'No data');
+		$(".snippet-" + m).html(snippet.length!=0?snippet.join('<br>'):'');
 		$(".metadata-" + m).html(f.email + " - " + f.department);
 	}
 }
