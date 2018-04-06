@@ -7,5 +7,5 @@ RUN mkdir -p /usr/src/app/project/static
 COPY nginx.conf /etc/nginx/
 COPY bfex.conf /etc/nginx/conf.d/
 
-COPY ../web/bfex/static/index.html /usr/src/app/project/static
-COPY ../web/bfex/static/batch.html /usr/src/app/project/static
+COPY static/index.html /usr/src/app/project/static
+COPY static/batch.html /usr/src/app/project/static
