@@ -1,0 +1,153 @@
+
+<div class="main text-center">
+    <div class="home text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="headline">BFEX Search Engine</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="" class="BFEX-search-form">
+                        <input type="search" placeholder="Search BFEX..." class="BFEX-search-input" id="BFEX-search-input">
+                        <button class="button btn btn-success btn-BFEX">BFEX Search</button>
+                        <a class="button btn btn-batch btn-info" href="batch.html" target="_blank">Batch mode</a>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <footer class="attribution">
+                        <p>Designed and coded by TEAM BFEX</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Results Page -->
+
+    <div class="result hidden">
+        <header class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="" class="result-BFEX-search-form">
+                            <input type="text" placeholder="Search BFEX..." class="result-BFEX-search-form-input" id="result-BFEX-search-form-input">
+                            <button class="btn btn-success result-btn-BFEX">BFEX Search</button>
+                        </form>
+                    </div>
+                    <div class="col-md-12">
+                        <h1>BFEX Search</h1>
+                    </div>		
+                </div>
+            </div>
+        </header>	
+        
+        <div class="container">
+            <section class="search-results">
+                <div class="one-half column">
+                    <div class="display-results"></div>
+                </div>
+            </section>
+        
+        </div> <!-- Container -->	
+    </div> <!-- Results -->
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js">    </script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dynatable/0.3.1/jquery.dynatable.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Dynatable/0.3.1/jquery.dynatable.min.js"></script>
+
+<script type="text/javascript">
+window.onload = function() {
+    document.getElementById("BFEX-search-input").focus();
+};
+
+function ajax (keyword) { //AJAX request
+	return $.ajax({ 
+		url: "/search?query=" + keyword,
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+			if (!response) {
+				showError(keyword);
+			}
+			else {
+                console.log('results');
+				showResults(response);
+			}
+		},
+		error: function () {
+			alert("Error retrieving search results, please refresh the page");
+		}
+	});
+}
+
+function showResults (callback) {
+    var data = callback.data;
+	for (var i = 0; i < data.length; i++) {
+		$(".display-results").append("<div class='result-list result-" + i + "'>" + "<span class='result-title title-" + i + "'></span>" + "<br>" +"<span class='result-snippet snippet-" + i + "'></span>" + "<br>" + "<span class='result-metadata metadata-" + i + "'></span>" + "</div>" );
+	}
+
+	for (var m = 0; m < data.length; m++) {
+        var f = data[m];
+		$(".title-" + m).html("<a href='#'>" + f.faculty_id + " - " + f.name + "</a>");
+        var snippet = [];
+        if (f.orc_id) snippet.push(f.orc_id);
+        if (f.google_scholar) snippet.push(f.google_scholar);
+        if (f.research_id) snippet.push(f.research_id);
+        if (f.sciverse_id) snippet.push(f.sciverse_id);
+		$(".snippet-" + m).html(snippet.length!=0?snippet.join('<br>'):'');
+		$(".metadata-" + m).html(f.email + " - " + f.department);
+	}
+}
+
+function showError(keyword) {
+	$(".display-results").append( "<div class='error'> <p>Your search <span class='keyword'>" + keyword + "</span> did not match any documents.</p> <p>Suggestions:</p><li>Make sure that all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li></div> ");
+}
+
+$(".result-btn-BFEX").click(function (event) {
+	event.preventDefault();
+	$(".display-results").html("");
+	var keyword = $(".result-BFEX-search-form-input").val();
+	document.getElementById("result-BFEX-search-form-input").blur();
+	ajax(keyword);
+});
+
+$(".btn-BFEX").click(function(event) {
+	event.preventDefault();
+	var keyword = $(".BFEX-search-input").val();
+
+	if (keyword !== "") {
+		$(".result-BFEX-search-form-input").val(keyword);
+		$(".home").addClass('hidden');
+   	 	$(".result").removeClass('hidden');
+    	document.getElementById("BFEX-search-input").blur();
+   		$(".BFEX-search-input").val("");
+		document.getElementById("result-BFEX-search-form-input").blur();	
+		$(".display-results").html("");
+        ajax(keyword);
+	}
+
+	else {
+		alert("Enter a keyword into the search box");
+	}
+	
+});
+</script>
