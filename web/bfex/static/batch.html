@@ -95,7 +95,7 @@ $('#table').bootstrapTable();
     .done(function(search,faculty,batch){
       var data = {};
       search[0].data.forEach(e => {
-        e.approach = {0:[],1:[],2:[],3:[]};
+        e.approach = {0:[],1:[],2:[],3:[],4:[],5:[]};
         data[e.faculty_id] = e;
       });
       // faculty[0].data.forEach(e => {});
