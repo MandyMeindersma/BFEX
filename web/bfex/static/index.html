@@ -50,7 +50,7 @@
         <div class="container">
             <section class="search-results">
                 <div class="one-half column">
-                    <div class="display-results"></div>
+                    <div class="display-results" style="font-size:1.5em"></div>
                 </div>
             </section>
         
@@ -107,7 +107,7 @@ function showResults (callback) {
 
 	for (var m = 0; m < data.length; m++) {
         var f = data[m];
-		$(".title-" + m).html("<a href='#'>" + f.faculty_id + " - " + f.name + "</a>");
+		$(".title-" + m).html("<b> Faculty ID: " + f.faculty_id + " - " + f.name + "</b>");
         var snippet = [];
         if (f.orc_id) snippet.push(f.orc_id);
         if (f.google_scholar) snippet.push(f.google_scholar);
