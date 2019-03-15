@@ -1,3 +1,5 @@
+Because I liteally always forget how to activate a virtual machine on windows `./venv/Scripts/activate`
+
 # BFEX [![CircleCI](https://circleci.com/gh/CMPUT401-Find-an-Expert/BFEX/tree/master.svg?style=shield)](https://circleci.com/gh/CMPUT401-Find-an-Expert/BFEX/tree/master)
 
 ## Dev Environment
